@@ -126,7 +126,7 @@ export function LocaleStepper({ projectId }: LocaleStepperProps) {
   const progress = (currentStep / steps.length) * 100;
 
   return (
-    <div className='space-y-8'>
+    <div className='space-y-5'>
       {/* Progress Header */}
       <Card>
         <CardHeader>

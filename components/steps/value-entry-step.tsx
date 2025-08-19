@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Edit, ArrowLeft, ArrowRight, Trash2, Plus } from "lucide-react";
 import type { ParsedField } from "@/components/locale-stepper";
+import { ScrollArea } from "../ui/scroll-area";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface ValueEntryStepProps {
   fields: ParsedField[];
@@ -28,6 +30,8 @@ export function ValueEntryStep({
   const [values, setValues] = useState<Record<string, any>>(
     initialValues || {}
   );
+
+  const isLargerDevice = useMediaQuery("(min-width: 1024px)");
 
   // ----- helpers for arrays and nested array item editing -----
   const handleArrayAdd = (path: string, field: ParsedField) => {
@@ -184,7 +188,7 @@ export function ValueEntryStep({
             depth > 0 ? "ml-4 pl-4 border-l-2 border-gray-200" : ""
           }`}
         >
-          <div className='space-y-4 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg'>
+          <div className='space-y-2 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg'>
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-2'>
                 <Label className='font-medium'>{key}</Label>
@@ -205,10 +209,17 @@ export function ValueEntryStep({
                 }
                 className='flex items-center gap-1 bg-transparent'
               >
-                <Plus className='h-3 w-3' /> Add Item
+                {isLargerDevice ? (
+                  <>
+                    <Plus className='h-3 w-3' />
+                    Add Item
+                  </>
+                ) : (
+                  <Plus className='h-3 w-3' />
+                )}
               </Button>
             </div>
-            <p className='text-xs text-gray-500 font-mono'>{path}</p>
+            {/* <p className='text-xs text-gray-500 font-mono'>{path}</p> */}
 
             <div className='space-y-3'>
               {arr.map((item: any, index: number) => (
@@ -332,8 +343,10 @@ export function ValueEntryStep({
           Fill in the translation values for each field
         </p>
       </CardHeader>
-      <CardContent className='space-y-6'>
-        <div className='space-y-4 max-h-96 overflow-y-auto'>{rendered}</div>
+      <CardContent className='space-y-6 max-lg:p-0'>
+        <ScrollArea className=' h-[calc(100dvh-570px)]'>
+          <div className='space-y-4'>{rendered}</div>
+        </ScrollArea>
 
         <div className='flex justify-between pt-4 border-t'>
           <Button
