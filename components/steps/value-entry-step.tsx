@@ -344,11 +344,11 @@ export function ValueEntryStep({
         </p>
       </CardHeader>
       <CardContent className='space-y-6 max-lg:p-0'>
-        <ScrollArea className=' h-[calc(100dvh-570px)]'>
+        <ScrollArea className='h-[calc(100dvh-620px)] rounded-lg lg:h-[calc(100dvh-570px)] overflow-hidden'>
           <div className='space-y-4'>{rendered}</div>
         </ScrollArea>
 
-        <div className='flex justify-between pt-4 border-t'>
+        <div className='flex justify-between pt-4 max-lg:px-3 border-t'>
           <Button
             variant='outline'
             onClick={onBack}

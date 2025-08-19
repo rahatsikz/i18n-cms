@@ -16,6 +16,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import type { ParsedField } from "@/components/locale-stepper";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface FieldConfigStepProps {
   fields: ParsedField[];
@@ -44,10 +45,10 @@ export function FieldConfigStep({
         <div
           key={field.path}
           className={`border-l-2 border-gray-200 ${
-            depth > 0 ? "ml-4 pl-4" : ""
+            depth > 0 ? "lg:ml-4 ml-2 pl-2 lg:pl-4" : ""
           }`}
         >
-          <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg'>
+          <div className='flex items-center max-lg:flex-col max-lg:items-start  justify-between px-2 py-4 lg:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg'>
             <div className='flex-1'>
               <div className='flex items-center gap-2 mb-2'>
                 <code className='text-sm font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded'>
@@ -56,22 +57,11 @@ export function FieldConfigStep({
                 <Badge variant='outline' className='text-xs'>
                   {field.type}
                 </Badge>
-                {field.value && (
-                  <Badge
-                    variant='secondary'
-                    className='text-xs max-w-32 truncate'
-                  >
-                    {field.value}
-                  </Badge>
-                )}
               </div>
-              <p className='text-sm text-gray-600 dark:text-gray-400'>
-                Path: {field.path}
-              </p>
             </div>
 
-            <div className='flex gap-4'>
-              <div className='flex items-center space-x-2'>
+            <div className='flex flex-wrap gap-4'>
+              <div className='flex  items-center space-x-2'>
                 <input
                   type='radio'
                   id={`${field.path}-input`}
@@ -114,10 +104,10 @@ export function FieldConfigStep({
         <div
           key={field.path}
           className={`border-l-2 border-blue-200 ${
-            depth > 0 ? "ml-4 pl-4" : ""
+            depth > 0 ? "ml-2 lg:ml-4 pl-2 lg:pl-4" : ""
           }`}
         >
-          <div className='p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg'>
+          <div className='lg:p-4 py-4 px-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg'>
             <div className='flex items-center gap-2 mb-2'>
               <code className='text-sm font-mono bg-blue-200 dark:bg-blue-700 px-2 py-1 rounded'>
                 {field.key}
@@ -130,12 +120,10 @@ export function FieldConfigStep({
                 array[{Array.isArray(field.value) ? field.value.length : 0}]
               </Badge>
             </div>
-            <p className='text-sm text-blue-600 dark:text-blue-400 mb-3'>
-              Path: {field.path}
-            </p>
+
             {field.arrayItemStructure &&
               field.arrayItemStructure.length > 0 && (
-                <div className='mt-3 p-3 bg-white dark:bg-gray-800 rounded border'>
+                <div className='mt-3 py-3 px-2 lg:p-3 bg-white dark:bg-gray-800 rounded border'>
                   <div className='flex items-center gap-2 mb-2 text-sm font-medium text-gray-700 dark:text-gray-300'>
                     <ChevronRight className='h-4 w-4' />
                     Array Item Structure:
@@ -172,11 +160,11 @@ export function FieldConfigStep({
           Review your JSON structure and configure input types for string fields
         </p>
       </CardHeader>
-      <CardContent className='space-y-6'>
-        <div className='space-y-4 max-h-96 overflow-y-auto'>
-          {fields.flatMap(renderField)}
-        </div>
-        <div className='flex justify-between pt-4 border-t'>
+      <CardContent className='space-y-6 max-lg:p-0'>
+        <ScrollArea className='h-[calc(100dvh-640px)] lg:h-[calc(100dvh-570px)]'>
+          <div className='space-y-4'>{fields.flatMap(renderField)}</div>
+        </ScrollArea>
+        <div className='flex justify-between pt-4 border-t max-lg:px-3'>
           <Button
             variant='outline'
             onClick={onBack}
