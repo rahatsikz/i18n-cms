@@ -4,7 +4,6 @@ import { JSX, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
 import {
   Settings,
@@ -48,9 +47,9 @@ export function FieldConfigStep({
             depth > 0 ? "lg:ml-4 ml-2 pl-2 lg:pl-4" : ""
           }`}
         >
-          <div className='flex items-center max-lg:flex-col max-lg:items-start  justify-between px-2 py-4 lg:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg'>
+          <div className='flex items-center max-lg:flex-col max-lg:gap-4 max-lg:items-start  justify-between px-2 py-4 lg:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg'>
             <div className='flex-1'>
-              <div className='flex items-center gap-2 mb-2'>
+              <div className='flex items-center gap-2 '>
                 <code className='text-sm font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded'>
                   {field.key}
                 </code>
@@ -60,7 +59,7 @@ export function FieldConfigStep({
               </div>
             </div>
 
-            <div className='flex flex-wrap gap-4'>
+            <div className='flex flex-wrap gap-4 max-lg:ml-1'>
               <div className='flex  items-center space-x-2'>
                 <input
                   type='radio'
