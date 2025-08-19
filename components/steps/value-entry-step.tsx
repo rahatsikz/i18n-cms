@@ -343,7 +343,7 @@ export function ValueEntryStep({
           Fill in the translation values for each field
         </p>
       </CardHeader>
-      <CardContent className='space-y-6 max-lg:p-0'>
+      <CardContent className='space-y-6 max-lg:px-2 max-lg:py-0'>
         <ScrollArea className='h-[calc(100dvh-620px)] rounded-lg lg:h-[calc(100dvh-570px)] overflow-hidden'>
           <div className='space-y-4'>{rendered}</div>
         </ScrollArea>

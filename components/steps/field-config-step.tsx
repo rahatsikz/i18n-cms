@@ -16,7 +16,8 @@ import {
 } from "lucide-react";
 import type { ParsedField } from "@/components/locale-stepper";
 import { ScrollArea } from "../ui/scroll-area";
-
+import { GeistSans } from "geist/font/sans";
+import { cn } from "@/lib/utils";
 interface FieldConfigStepProps {
   fields: ParsedField[];
   initialConfigs: Record<string, "input" | "textarea">;
@@ -50,7 +51,12 @@ export function FieldConfigStep({
           <div className='flex items-center max-lg:flex-col max-lg:gap-4 max-lg:items-start  justify-between px-2 py-4 lg:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg'>
             <div className='flex-1'>
               <div className='flex items-center gap-2 '>
-                <code className='text-sm font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded'>
+                <code
+                  className={cn(
+                    "text-sm  bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded",
+                    GeistSans.className
+                  )}
+                >
                   {field.key}
                 </code>
                 <Badge variant='outline' className='text-xs'>
@@ -108,7 +114,12 @@ export function FieldConfigStep({
         >
           <div className='lg:p-4 py-4 px-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg'>
             <div className='flex items-center gap-2 mb-2'>
-              <code className='text-sm font-mono bg-blue-200 dark:bg-blue-700 px-2 py-1 rounded'>
+              <code
+                className={cn(
+                  "text-sm  bg-blue-200 dark:bg-blue-700 px-2 py-1 rounded",
+                  GeistSans.className
+                )}
+              >
                 {field.key}
               </code>
               <Badge
@@ -159,7 +170,7 @@ export function FieldConfigStep({
           Review your JSON structure and configure input types for string fields
         </p>
       </CardHeader>
-      <CardContent className='space-y-6 max-lg:p-0'>
+      <CardContent className='space-y-6 max-lg:px-2 max-lg:py-0'>
         <ScrollArea className='h-[calc(100dvh-640px)] lg:h-[calc(100dvh-570px)]'>
           <div className='space-y-4'>{fields.flatMap(renderField)}</div>
         </ScrollArea>
