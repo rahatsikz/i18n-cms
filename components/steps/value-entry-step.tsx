@@ -348,7 +348,7 @@ export function ValueEntryStep({
           <div className='space-y-4'>{rendered}</div>
         </ScrollArea>
 
-        <div className='flex justify-between pt-4 max-lg:px-3 border-t'>
+        <div className='flex justify-between pt-4 max-lg:px-1 border-t'>
           <Button
             variant='outline'
             onClick={onBack}

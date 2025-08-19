@@ -174,7 +174,7 @@ export function FieldConfigStep({
         <ScrollArea className='h-[calc(100dvh-640px)] lg:h-[calc(100dvh-570px)]'>
           <div className='space-y-4'>{fields.flatMap(renderField)}</div>
         </ScrollArea>
-        <div className='flex justify-between pt-4 border-t max-lg:px-3'>
+        <div className='flex justify-between pt-4 border-t max-lg:px-1'>
           <Button
             variant='outline'
             onClick={onBack}
