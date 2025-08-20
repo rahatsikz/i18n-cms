@@ -1,11 +1,9 @@
-"use client"
-
-import type React from "react"
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+"use client";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,107 +11,141 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Users, Loader2 } from "lucide-react"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { toast } from "sonner";
+import { Users, Loader2 } from "lucide-react";
+import { useCreateUser } from "@/api/auth.queries";
+import axios from "axios";
+
+// schema for validation
+const schema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+type FormValues = z.infer<typeof schema>;
 
 export function CreateUserModal() {
-  const [open, setOpen] = useState(false)
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
 
+  const { mutate, isPending } = useCreateUser();
+
+  const onSubmit = async (values: FormValues) => {
     try {
-      const response = await fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      })
-
-      if (response.ok) {
-        setSuccess(true)
-        setUsername("")
-        setPassword("")
-        setTimeout(() => {
-          setOpen(false)
-          setSuccess(false)
-        }, 2000)
-      } else {
-        const data = await response.json()
-        setError(data.error || "Failed to create user")
-      }
-    } catch (err) {
-      setError("Network error. Please try again.")
-    } finally {
-      setIsLoading(false)
+      mutate(values, {
+        onSuccess: () => {
+          toast.success("User created successfully!");
+          form.reset();
+          setOpen(false);
+        },
+        onError: (error) => {
+          if (axios.isAxiosError(error)) {
+            const message =
+              error.response?.data?.message || "An error occurred";
+            toast.error(`${message}`);
+          } else {
+            toast.error("An unexpected error occurred.");
+          }
+        },
+      });
+    } catch {
+      toast.error("Network error. Please try again.");
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="flex items-center gap-2 bg-transparent">
-          <Users className="h-4 w-4" />
+        <Button
+          variant='outline'
+          size='sm'
+          className='flex items-center gap-2 bg-transparent'
+        >
+          <Users className='h-4 w-4' />
           Create User
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+
+      <DialogContent className='sm:max-w-md'>
         <DialogHeader>
           <DialogTitle>Create New User</DialogTitle>
-          <DialogDescription>Add a new user to the CMS system.</DialogDescription>
+          <DialogDescription>
+            Add a new user to the CMS system.
+          </DialogDescription>
         </DialogHeader>
 
-        {success ? (
-          <Alert className="border-green-200 bg-green-50 text-green-800">
-            <AlertDescription>User created successfully!</AlertDescription>
-          </Alert>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
+        <Form {...form}>
+          <form
+            autoComplete='off'
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='space-y-4'
+          >
+            <FormField
+              control={form.control}
+              name='username'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='Enter username'
+                      {...field}
+                      autoComplete='off'
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="new-username">Username</Label>
-              <Input
-                id="new-username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                placeholder="Enter username"
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name='password'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type='password'
+                      placeholder='Enter password'
+                      {...field}
+                      autoComplete='new-password'
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="new-password">Password</Label>
-              <Input
-                id="new-password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="Enter password"
-              />
-            </div>
-
-            <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <div className='flex justify-end gap-2'>
+              <Button
+                type='button'
+                variant='outline'
+                onClick={() => setOpen(false)}
+              >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? (
+              <Button type='submit' disabled={isPending}>
+                {isPending ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                     Creating...
                   </>
                 ) : (
@@ -122,8 +154,8 @@ export function CreateUserModal() {
               </Button>
             </div>
           </form>
-        )}
+        </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
