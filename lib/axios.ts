@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Check if user is logged in -> needed to use the zustand state this way coz it's class component.. not function component
     // Handle response errors globally -> if there is no user or unauthorized error get pops up
-    if (error.response.status === 401) {
+    if (error.response.status === 401 || error.response.status === 403) {
       window.location.href = "/";
       return;
     }

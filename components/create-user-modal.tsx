@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { Users, Loader2 } from "lucide-react";
 import { useCreateUser } from "@/api/auth.queries";
 import axios from "axios";
+import { useQueryClient } from "@tanstack/react-query";
 
 // schema for validation
 const schema = z.object({
@@ -46,11 +47,15 @@ export function CreateUserModal() {
   });
 
   const { mutate, isPending } = useCreateUser();
+  const queryClient = useQueryClient();
 
   const onSubmit = async (values: FormValues) => {
     try {
       mutate(values, {
         onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ["users"],
+          });
           toast.success("User created successfully!");
           form.reset();
           setOpen(false);
